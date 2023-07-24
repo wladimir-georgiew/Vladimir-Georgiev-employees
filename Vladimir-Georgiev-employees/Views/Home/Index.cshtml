@@ -4,11 +4,16 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+<div style="display:flex; justify-content: space-between">
+    <form asp-controller="Home" asp-action="Index" method="post" enctype="multipart/form-data">
+        <div style="display:grid;">
+            <input type="file" name="csvFile" />
+            <button style="margin-top:1rem;" class="btn btn-primary" type="submit">Submit</button>
+        </div>
+    </form>
 
-<form asp-controller="Home" asp-action="Index" method="post" enctype="multipart/form-data">
-    <input type="file" name="csvFile" />
-    <button class="btn btn-primary" type="submit">Submit</button>
-</form>
+    <a style="align-self:center;" href="/home/download" class="btn-warning btn">Download example .csv file</a>
+</div>
 
 <hr />
 
@@ -52,8 +57,8 @@
     }
 </table>
 
-@if (Model!.IsSuccess && 
-     (Model!.Data == null || !Model!.Data.Any()))
+@if (Model!.IsSuccess &&
+    (Model!.Data == null || !Model!.Data.Any()))
 {
     <div style="margin-top: 1rem; margin-bottom:1rem; color:darkorange">
         No employees found.

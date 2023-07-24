@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Vladimir_Georgiev_employees.Models.DTOs;
 using Vladimir_Georgiev_employees.Models.Response;
 using Vladimir_Georgiev_employees.Services.Contracts;
 
@@ -20,8 +19,13 @@ namespace Vladimir_Georgiev_employees.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(IFormFile csvFile)
+        public IActionResult Index(IFormFile? csvFile)
         {
+            if (csvFile == null)
+            {
+                return View(new BaseResponseModel<IEnumerable<ProjectEmployeePairModel>>(null, false, "Please, attach a file before submitting."));
+            }
+
             BaseResponseModel<IEnumerable<ProjectEmployeePairModel>> response;
 
             try
@@ -51,6 +55,18 @@ namespace Vladimir_Georgiev_employees.Controllers
             }
 
             return View(response);
+        }
+
+        /// <summary>
+        /// Downloads the example .csv file used for testing
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Download()
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), $"employees.csv");
+
+            byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+            return File(fileBytes, "application/force-download", "employees.csv");
         }
     }
 }

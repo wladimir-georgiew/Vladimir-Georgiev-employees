@@ -1,3 +1,6 @@
+using Vladimir_Georgiev_employees.Services;
+using Vladimir_Georgiev_employees.Services.Contracts;
+
 namespace Vladimir_Georgiev_employees
 {
     public class Program
@@ -8,6 +11,7 @@ namespace Vladimir_Georgiev_employees
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 
             var app = builder.Build();
 

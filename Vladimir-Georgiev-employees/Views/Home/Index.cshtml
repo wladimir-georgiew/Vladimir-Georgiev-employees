@@ -1,8 +1,61 @@
-﻿@{
+﻿@using Vladimir_Georgiev_employees.Models.Response;
+@model BaseResponseModel<IEnumerable<ProjectEmployeePairModel>>;
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<form asp-controller="Home" asp-action="Index" method="post" enctype="multipart/form-data">
+    <input type="file" name="csvFile" />
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+<hr />
+
+@if (!Model?.IsSuccess ?? false)
+{
+    <div style="margin-top: 1rem; margin-bottom:1rem; color:red">
+        @Model!.ErrorMessage
+    </div>
+}
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                EmployeeID #1
+            </th>
+            <th>
+                EmployeeID #2
+            </th>
+            <th>
+                Project ID
+            </th>
+            <th>
+                Days Worked
+            </th>
+        </tr>
+    </thead>
+    @if (Model!.Data?.Any() ?? false)
+    {
+        <tbody class="tbody">
+            @foreach (var item in Model.Data)
+            {
+                <tr>
+                    <td>@(item.EmployeesPair?.Employee1?.EmployeeId ?? "NULL")</td>
+                    <td>@(item.EmployeesPair?.Employee2?.EmployeeId ?? "NULL")</td>
+                    <td>@item.ProjectId</td>
+                    <td>@(item.EmployeesPair?.DaysWorkedTogether.ToString() ?? "No pairs found for this project")</td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>
+
+@if (Model!.IsSuccess && 
+     (Model!.Data == null || !Model!.Data.Any()))
+{
+    <div style="margin-top: 1rem; margin-bottom:1rem; color:darkorange">
+        No employees found.
+    </div>
+}
